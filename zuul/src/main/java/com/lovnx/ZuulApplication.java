@@ -5,12 +5,11 @@ import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 
-import com.lovnx.filter.AccessFilter;
 import com.lovnx.filter.ErrorFilter;
-import com.lovnx.filter.RateLimitFilter;
+import com.lovnx.filter.FirstFilter;
 import com.lovnx.filter.ResultFilter;
-import com.lovnx.filter.UuidFilter;
-import com.lovnx.filter.ValidateFilter;
+import com.lovnx.filter.SecondFilter;
+import com.marcosbarbero.zuul.filters.pre.ratelimit.RateLimitFilter;
 
 @EnableZuulProxy
 @SpringCloudApplication
@@ -21,13 +20,13 @@ public class ZuulApplication {
 	}
 
 	@Bean
-	public AccessFilter accessFilter() {
-		return new AccessFilter();
+	public FirstFilter accessFilter() {
+		return new FirstFilter();
 	}
 	
 	@Bean
 	public RateLimitFilter rateLimiterFilter() {
-		return new RateLimitFilter();
+		return new RateLimitFilter(null, null, null);
 	}
 	
 	@Bean
@@ -36,13 +35,13 @@ public class ZuulApplication {
 	}
 	
 	@Bean
-	public UuidFilter uuidFilter() {
-		return new UuidFilter();
+	public SecondFilter uuidFilter() {
+		return new SecondFilter();
 	}
 	
 	@Bean
-	public ValidateFilter validateFilter() {
-		return new ValidateFilter();
+	public ErrorFilter validateFilter() {
+		return new ErrorFilter();
 	}
 	
 	@Bean
